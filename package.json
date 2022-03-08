@@ -4,6 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "build": "tsc",
+    "start": "tsc -w --preserveWatchOutput",
+    "exec": "nodemon --watch '*.ts' --exec 'ts-node' src/app.ts",
+    "exec:build": "env $(cat .env_dev) node build/app.js"
   },
   "author": "Anıl Gülgör",
   "license": "ISC",
