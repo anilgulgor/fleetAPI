@@ -22,3 +22,15 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: fleetAdmin
       ME_CONFIG_MONGODB_ADMINPASSWORD: pass123
       ME_CONFIG_MONGODB_URL: mongodb://fleetAdmin:pass123@mongo:27017/
+
+  fleet-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: fleet-api:latest
+    expose: 
+      - 8000
+    ports:
+    - '8000:8000'
+    environment:
+      MONGO_HOST: mongodb://fleetAdmin:pass123@mongo:27017/fleetdb?authSource=admin

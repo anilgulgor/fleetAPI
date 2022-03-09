@@ -2,6 +2,7 @@ import * as hapi from '@hapi/hapi';
 import * as glob from 'glob';
 import * as path from 'path';
 import { ServerPlugins } from './serverPlugins';
+import { startConnection } from '../helpers/mongoClient';
 
 export class ServerStarter {
 
@@ -23,9 +24,9 @@ export class ServerStarter {
 
         await this.register();
 
-        this.setRoutes();
+        await this.start();
 
-        this.start();
+        this.startMongoConnection();
 
     }
 
@@ -33,6 +34,7 @@ export class ServerStarter {
         return new Promise<void>((resolve, reject) => {
             this.server.register(ServerPlugins).then(() => {
                 console.log('Server Plugins registered successfully');
+                this.setRoutes();
                 resolve();
             }).catch((err) => {
                 console.log(`An error has occured while registering Server Plugins. Error: ${err}`);
@@ -54,13 +56,25 @@ export class ServerStarter {
 
     }
 
-    private start() {
-
-        this.server.start().then(() => {
-            console.log(`Server started on host: ${this.server.info.host} and port: ${this.server.info.port}`);
-        }).catch((err) => {
-            console.log(`An error has occured while starting server. Error: ${err}`);
+    private async start() {
+        return new Promise<void>((resolve, reject) => {
+            this.server.start().then(() => {
+                console.log(`Server started on host: ${this.server.info.host} and port: ${this.server.info.port}`);
+                resolve();
+            }).catch((err) => {
+                console.log(`An error has occured while starting server. Error: ${err}`);
+                reject(err);
+            })
         })
+    }
+
+    private startMongoConnection() {
+
+        try {
+            startConnection();
+        } catch(err) {
+            console.log(err);
+        }
 
     }
 
