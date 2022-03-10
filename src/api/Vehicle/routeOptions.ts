@@ -1,7 +1,7 @@
 import * as Hapi from '@hapi/hapi';
 import Joi from 'joi';
 
-const TURKISH_PLATE_PATTERN = /^(0[1-9]|[1-7][0-9]|8[01])(([A-Z])(\d{4,5})|([A-Z]{2})(\d{3,4})|([A-Z]{3})(\d{2,3}))$/
+const TURKISH_PLATE_PATTERN = /^(0[1-9]|[1-7][0-9]|8[01])(\s)(([A-Z])(\s)(\d{4,5})|([A-Z]{2})(\s)(\d{3,4})|([A-Z]{3})(\s)(\d{2,3}))$/
 
 export const createVehicleOptions: Hapi.RouteOptions = {
     auth: false,
