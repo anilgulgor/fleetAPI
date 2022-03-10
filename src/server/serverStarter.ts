@@ -31,6 +31,7 @@ export class ServerStarter {
     }
 
     private async register() {
+
         return new Promise<void>((resolve, reject) => {
             this.server.register(ServerPlugins).then(() => {
                 console.log('Server Plugins registered successfully');
@@ -41,6 +42,7 @@ export class ServerStarter {
                 reject(err);
             })
         })
+
     }
 
     private setRoutes() {

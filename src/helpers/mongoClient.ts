@@ -1,7 +1,7 @@
 import mongoose = require('mongoose');
+import { VehicleModel } from './../models/Vehicle/Vehicle.model';
 
 export const startConnection = () => {
-	//console.log(`${process.env.mongoHost}:${process.env.mongoPort}/${process.env.dbName}`)
 
 	const db: mongoose.Connection = mongoose.connection;
 

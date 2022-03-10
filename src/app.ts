@@ -1,4 +1,5 @@
 import figlet from 'figlet';
+import { VehicleModel } from './models/Vehicle/Vehicle.model';
 import { ServerStarter } from './server/serverStarter';
 
 figlet(`Fleet Management API`, (err: any, data: any) => {
