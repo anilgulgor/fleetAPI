@@ -6,8 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "tsc -w --preserveWatchOutput",
-    "exec": "nodemon --watch '*.ts' --exec 'ts-node' src/app.ts",
-    "exec:build": "node build/app.js"
+    "exec": "env $(cat .env) nodemon --watch '*.ts' --exec 'ts-node' src/app.ts",
+    "exec:build": "env $(cat .env) node build/app.js"
   },
   "author": "Anıl Gülgör",
   "license": "ISC",
@@ -26,7 +26,7 @@
     "@types/node": "^14.11.5",
     "figlet": "^1.5.0",
     "glob": "^7.1.6",
-    "hapi-swagger": "^14.2.4",
+    "hapi-swagger": "^14.2.5",
     "joi": "^17.2.1",
     "mongoose": "^6.2.4",
     "path": "^0.12.7",
@@ -34,6 +34,7 @@
     "typescript": "^4.0.3"
   },
   "devDependencies": {
+    "dotenv": "^16.0.0",
     "nodemon": "^2.0.4"
   }
 }

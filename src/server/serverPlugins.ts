@@ -17,7 +17,7 @@ export const ServerPlugins: Array<Hapi.ServerRegisterPluginObject<any>> = [
 				title: 'Fleet Management System API Documentation',
 				version: '1.0',
 			},
-			schemes: ['https'],
+			schemes: ['http'],
 			basePath: '/',
 			documentationPath: '/',
 		},

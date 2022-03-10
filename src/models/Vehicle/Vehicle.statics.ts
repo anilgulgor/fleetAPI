@@ -1,14 +1,21 @@
 import { IVehicleDocument, IVehicleModel } from "./Vehicle";
 import { VehicleModel } from "./Vehicle.model";
+import * as ERRORS from '../../shared/errors.json';
+import { ObjectResponse } from "../../shared/response";
 
 export async function createVehicle({ plate }: { plate: String }): Promise<IVehicleDocument> {
 
     return new Promise<IVehicleDocument>((resolve, reject) => {
-        
-        return VehicleModel.findOne({plate: plate}).then((vehicle) => {
+
+        return VehicleModel.findOne({ plate: plate }).then((vehicle) => {
 
             if (vehicle) {
-                resolve(vehicle);
+                reject(ObjectResponse({
+                    status: ERRORS.VEHICLE_ERRORS.VE_1,
+                    userMessage: `The Vehicle with plate: ${plate} is already registered in the system.`,
+                    developerMessage: `${ERRORS.VEHICLE_ERRORS.VE_1}: ${plate}`
+                }));
+                return;
             } else {
                 VehicleModel.create({
                     plate: plate

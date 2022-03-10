@@ -7,5 +7,6 @@ figlet(`Fleet Management API`, (err: any, data: any) => {
     console.log(data);
 });
 
+console.log(process.env.MONGO_HOST);
 const server: ServerStarter = new ServerStarter(8000, '0.0.0.0');
 server.init();

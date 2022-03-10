@@ -1,5 +1,4 @@
 import mongoose = require('mongoose');
-import { VehicleModel } from './../models/Vehicle/Vehicle.model';
 
 export const startConnection = () => {
 
@@ -7,7 +6,6 @@ export const startConnection = () => {
 
 	try {
 		mongoose.connect(`${process.env.MONGO_HOST}`);
-
 	} catch (err) {
 		throw err;
 	}
