@@ -1,5 +1,8 @@
 {
     "VEHICLE_ERRORS": {
         "VE_1": "ALREADY_REGISTERED"
+    },
+    "DELIVERY_POINT_ERRORS": {
+        "DP_1": "ALREADY CREATED"
     }
 }
