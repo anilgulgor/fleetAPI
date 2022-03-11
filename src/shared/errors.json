@@ -3,6 +3,10 @@
         "VE_1": "ALREADY_REGISTERED"
     },
     "DELIVERY_POINT_ERRORS": {
-        "DP_1": "ALREADY CREATED"
+        "DP_1": "ALREADY CREATED",
+        "DP_2": "DELIVERY POINT NOT FOUND"
+    },
+    "BAG_ERRORS": {
+        "BAG_1": "ALREADY CREATED"
     }
 }

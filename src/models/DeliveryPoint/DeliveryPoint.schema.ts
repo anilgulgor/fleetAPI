@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { IDeliveryPoint, IDeliveryPointModel } from "./DeliveryPoint";
 import { createDeliveryPoint } from "./DeliveryPoint.statics";
 
 const DeliveryPointSchema = new mongoose.Schema(
