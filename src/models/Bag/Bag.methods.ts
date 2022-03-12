@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { IBagDocument } from "./Bag";
 import { BAG_STATUS } from "../../shared/status";
 
-export async function setStatus(this: IBagDocument, {value}: {value: Number}): Promise<void> {
+export async function setBagStatus(this: IBagDocument, {value}: {value: Number}): Promise<void> {
 
     switch (value) {
         case BAG_STATUS.Created:

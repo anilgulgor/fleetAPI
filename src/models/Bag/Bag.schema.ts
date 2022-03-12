@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { createBag } from "./Bag.statics";
-import { setStatus } from "./Bag.methods";
+import { setBagStatus } from "./Bag.methods";
 
 const BagSchema = new mongoose.Schema(
     {
@@ -15,6 +15,6 @@ const BagSchema = new mongoose.Schema(
 )
 
 BagSchema.statics.createBag = createBag;
-BagSchema.methods.setStatus = setStatus;
+BagSchema.methods.setBagStatus = setBagStatus;
 
 export default BagSchema;

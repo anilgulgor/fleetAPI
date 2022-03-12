@@ -14,7 +14,7 @@ export interface IBag {
 }
 
 export interface IBagDocument extends IBag, mongoose.Document {
-    setStatus(this: IBagDocument, {value}: {value: Number}): Promise<void>;
+    setBagStatus(this: IBagDocument, {value}: {value: Number}): Promise<void>;
 }
 export interface IBagModel extends mongoose.Model<IBagDocument> {
     createBag({barcode, deliveryPoint}: {barcode: String, deliveryPoint: Number}): Promise<IBagDocument>;

@@ -30,7 +30,7 @@ export async function createBag({ barcode, deliveryPoint }: { barcode: String, d
                                 destination: _deliveryPoint,
                                 deliveryPointForUnloading: _deliveryPoint.value
                             }).then((newBag) => {
-                                newBag.setStatus({value: BAG_STATUS.Created});
+                                newBag.setBagStatus({value: BAG_STATUS.Created});
                                 resolve(newBag);
                             }).catch((err) => {
                                 reject(err);
