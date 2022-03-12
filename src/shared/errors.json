@@ -8,5 +8,8 @@
     },
     "BAG_ERRORS": {
         "BAG_1": "ALREADY CREATED"
+    },
+    "PACKAGE_ERRORS": {
+        "PKG_1": "ALREADY CREATED"
     }
 }
