@@ -10,7 +10,7 @@ export async function createBag({ barcode, deliveryPoint }: { barcode: String, d
     return new Promise<IBagDocument>((resolve, reject) => {
 
         return BagModel.findOne({ barcode: barcode })
-            .populate({ path: 'deliveryPointForUnloading', model: 'DeliveryPoint' })
+            .populate({ path: 'destination', model: 'DeliveryPoint' })
             .then((bag) => {
 
                 if (bag) {
