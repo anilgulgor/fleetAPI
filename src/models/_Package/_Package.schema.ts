@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { setPackageStatus } from "./Package.methods";
-import { createPackage } from "./Package.statics";
+import { assignPackageToBag, setPackageStatus } from "./_Package.methods";
+import { createPackage } from "./_Package.statics";
 
 const PackageSchema = new mongoose.Schema(
     {
@@ -19,5 +19,6 @@ const PackageSchema = new mongoose.Schema(
 
 PackageSchema.statics.createPackage = createPackage;
 PackageSchema.methods.setPackageStatus = setPackageStatus;
+PackageSchema.methods.assignPackageToBag = assignPackageToBag;
 
 export default PackageSchema;

@@ -7,9 +7,11 @@
         "DP_2": "DELIVERY POINT NOT FOUND"
     },
     "BAG_ERRORS": {
-        "BAG_1": "ALREADY CREATED"
+        "BAG_1": "ALREADY CREATED",
+        "BAG_2": "BAG NOT FOUND"
     },
     "PACKAGE_ERRORS": {
-        "PKG_1": "ALREADY CREATED"
+        "PKG_1": "ALREADY CREATED",
+        "PKG_2": "PACKAGE NOT FOUND"
     }
 }

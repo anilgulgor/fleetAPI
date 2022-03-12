@@ -1,5 +1,5 @@
-import { IPackageDocument } from "./package";
-import { PackageModel } from "./package.model";
+import { IPackageDocument } from "./_Package";
+import { PackageModel } from "./_Package.model";
 import * as ERRORS from '../../shared/errors.json';
 import { ObjectResponse } from "../../shared/response";
 import { DeliveryPointModel } from "../DeliveryPoint/DeliveryPoint.model";
@@ -7,10 +7,10 @@ import { PACKAGE_STATUS } from "../../shared/status";
 
 export async function createPackage({barcode, deliveryPoint, volumetricWeight}: {barcode: String, deliveryPoint: Number, volumetricWeight: Number}): Promise<IPackageDocument> {
 
-    return new Promise((resolve, reject) => {
+    return new Promise<IPackageDocument>((resolve, reject) => {
 
         return PackageModel.findOne({barcode: barcode})
-        .populate({ path: 'deliveryPointForUnloading', model: 'DeliveryPoint' })
+        .populate({ path: 'destination', model: 'DeliveryPoint' })
         .populate({ path: 'bag', model: 'Bag' })
         .then((_package) => {
 

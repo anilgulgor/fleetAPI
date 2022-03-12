@@ -18,7 +18,8 @@ export interface IPackage {
 }
 
 export interface IPackageDocument extends IPackage, mongoose.Document {
-    setPackageStatus(this: IPackageDocument, {value}: {value: Number}): Promise<void>;
+    setPackageStatus(this: IPackageDocument, {value}: {value: Number}): void;
+    assignPackageToBag(this: IPackageDocument, {bagBarcode}: {bagBarcode: String}): Promise<IPackageDocument>;
 }
 export interface IPackageModel extends mongoose.Model<IPackageDocument> {
     createPackage({barcode, deliveryPoint, volumetricWeight}: {barcode: String, deliveryPoint: Number, volumetricWeight: Number}): Promise<IPackageDocument>;

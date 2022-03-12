@@ -18,3 +18,22 @@ export const createPackageOptions: Hapi.RouteOptions = {
     notes: 'This method creates a single package with barcode, volumetric weight and delivery point with given delivery point value',
     tags: ['api']
 }
+
+export const assignPackageToBagOptions: Hapi.RouteOptions = {
+    auth: false,
+    validate: {
+        failAction: (request, h, err) => {
+            console.log(err);
+			throw err;
+		},
+        payload: Joi.object({
+            bagBarcode: Joi.string().required()
+        }).label('AssignPackageToBag Payload'),
+        params: Joi.object({
+            packageBarcode: Joi.string().required()
+        }).label('AssignPackageToBag Params')
+    },
+    description: 'Assign Package to Bag with package barcode and bag barcode',
+    notes: 'This method is used to assign a package with given barcode in url params to bag with given barcode body',
+    tags: ['api']
+}

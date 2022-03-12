@@ -9,5 +9,11 @@ export const Routes: Array<Hapi.ServerRoute> = [
 		options: RouteOptions.createPackageOptions,
 		handler: Controller.createPackage,
 	},
+    {
+        path: '/package/{packageBarcode}/assignToBag',
+        method: 'PUT',
+        options: RouteOptions.assignPackageToBagOptions,
+        handler: Controller.assignPackageToBag
+    }
 ]
 
