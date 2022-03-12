@@ -15,6 +15,10 @@ export interface IBag {
 
 export interface IBagDocument extends IBag, mongoose.Document {
     setBagStatus(this: IBagDocument, {value}: {value: Number}): Promise<void>;
+    loadBag(this: IBagDocument): void;
+    unloadBagAndAssignedPackages(this: IBagDocument, deliveryPointValue: Number): void;
+    isDeliveryPointRight(this: IBagDocument, deliveryPointValue: Number): boolean;
+    checkIfCanBeUnloaded(this: IBagDocument): Promise<void>;
 }
 export interface IBagModel extends mongoose.Model<IBagDocument> {
     createBag({barcode, deliveryPoint}: {barcode: String, deliveryPoint: Number}): Promise<IBagDocument>;

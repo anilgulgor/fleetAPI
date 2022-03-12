@@ -5,7 +5,7 @@ import { BagModel } from "../Bag/Bag.model";
 import * as ERRORS from "../../shared/errors.json"
 import { ObjectResponse } from "../../shared/response";
 
-export async function setPackageStatus(this: IPackageDocument, {value}: {value: Number}) {
+export async function setPackageStatus(this: IPackageDocument, { value }: { value: Number }) {
 
     switch (value) {
         case PACKAGE_STATUS.Created:
@@ -36,47 +36,113 @@ export async function setPackageStatus(this: IPackageDocument, {value}: {value: 
     }
 
     await this.save();
-    
+
 }
 
-export async function assignPackageToBag(this: IPackageDocument, {bagBarcode}: {bagBarcode: String}): Promise<IPackageDocument> {
+export async function assignPackageToBag(this: IPackageDocument, { bagBarcode }: { bagBarcode: String }): Promise<IPackageDocument> {
 
     return new Promise<IPackageDocument>((resolve, reject) => {
 
-        return BagModel.findOne({barcode: bagBarcode})
-        .populate({ path: 'destination', model: 'DeliveryPoint' })
-        .then((bag) => {
+        return BagModel.findOne({ barcode: bagBarcode })
+            .populate({ path: 'destination', model: 'DeliveryPoint' })
+            .then((bag) => {
 
-            if (bag) {
-                
-                this.bag = bag;
-                this.bagBarcode = bag.barcode
-                this.destination = bag.destination;
-                this.deliveryPointForUnloading = bag.deliveryPointForUnloading;
+                if (bag) {
 
-                return this.save().then((_package) => {
-                    console.log(_package);
-                    resolve(_package);
+                    if (this.destination.value == bag.destination.value) {
+
+                        this.bag = bag;
+                        this.bagBarcode = bag.barcode
+                        this.destination = bag.destination;
+                        this.deliveryPointForUnloading = bag.deliveryPointForUnloading;
+
+                        return this.save().then((_package) => {
+                            console.log(_package);
+                            resolve(_package);
+                            return;
+                        }).catch((err) => {
+                            reject(err);
+                            return;
+                        })
+
+                    } else {
+                        reject(ObjectResponse({
+                            status: ERRORS.BAG_ERRORS.BAG_3,
+                            userMessage: `Bag: ${bag.barcode} destination is not compatible with package: ${this.barcode} destination`,
+                            developerMessage: `${ERRORS.BAG_ERRORS.BAG_3}: bag: ${bag.barcode} package: ${this.barcode}`
+                        }));
+                        return;
+                    }
+
+                } else {
+                    reject(ObjectResponse({
+                        status: ERRORS.BAG_ERRORS.BAG_2,
+                        userMessage: `Bag barcode: ${bagBarcode} for assigning with package not found`,
+                        developerMessage: `${ERRORS.BAG_ERRORS.BAG_2}: ${bagBarcode}`
+                    }));
                     return;
-                }).catch((err) => {
-                    reject(err);
-                    return;
-                })
+                }
 
-            } else {
-                reject(ObjectResponse({
-                    status: ERRORS.BAG_ERRORS.BAG_2,
-                    userMessage: `Bag barcode: ${bagBarcode} for assigning with package not found`,
-                    developerMessage: `${ERRORS.BAG_ERRORS.BAG_2}: ${bagBarcode}`
-                }));
+            }).catch((err) => {
+                reject(err);
                 return;
-            }
-    
-        }).catch((err) => {
-            reject(err);
-            return;
-        })
+            })
 
     })
+
+}
+
+export async function isAssignedToBag(this: IPackageDocument): Promise<boolean> {
+
+    return new Promise((resolve, reject) => {
+
+        if (this.bag) {
+            // Assigned to bag
+            resolve(true);
+            return;
+        } else {
+            // Not assigned to any bag
+            resolve(false);
+            return;
+        }
+
+    })
+
+}
+
+export async function loadPackage(this: IPackageDocument) {
+
+    const isAssignedToBag: boolean = await this.isAssignedToBag();
+
+    if (!isAssignedToBag) {
+        // is not assigned to bag. Set status loaded
+        this.setPackageStatus({ value: PACKAGE_STATUS.Loaded });
+    } else {
+        // is assigned to bag. Set status loaded into bag
+        this.setPackageStatus({ value: PACKAGE_STATUS.LoadedIntoBag });
+    }
+
+}
+
+export function isDeliveryPointRight(this: IPackageDocument, deliveryPointValue: Number): boolean {
+
+    if (this.destination.value == deliveryPointValue) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
+
+export async function unloadPackage(this: IPackageDocument, deliveryPointValue: Number) {
+
+    // set package status to unloaded if delivery point is right
+    if (this.isDeliveryPointRight(deliveryPointValue)) {
+        // delivery point is right. set package status to unloaded
+        this.setPackageStatus({ value: PACKAGE_STATUS.Unloaded });
+        BagModel.findOne({barcode: this.bagBarcode}).then((bag) => {
+            bag?.checkIfCanBeUnloaded();
+        })
+    }
 
 }

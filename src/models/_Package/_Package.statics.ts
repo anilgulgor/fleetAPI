@@ -4,6 +4,7 @@ import * as ERRORS from '../../shared/errors.json';
 import { ObjectResponse } from "../../shared/response";
 import { DeliveryPointModel } from "../DeliveryPoint/DeliveryPoint.model";
 import { PACKAGE_STATUS } from "../../shared/status";
+import { ShipmentModel } from "../Shipment/Shipment.model";
 
 export async function createPackage({barcode, deliveryPoint, volumetricWeight}: {barcode: String, deliveryPoint: Number, volumetricWeight: Number}): Promise<IPackageDocument> {
 
@@ -32,6 +33,7 @@ export async function createPackage({barcode, deliveryPoint, volumetricWeight}: 
                             destination: _deliveryPoint,
                             deliveryPointForUnloading: _deliveryPoint.value
                         }).then((newPackage) => {
+                            ShipmentModel.createShipment({shipmentBarcode: newPackage.barcode, _package: newPackage});
                             newPackage.setPackageStatus({value: PACKAGE_STATUS.Created});
                             resolve(newPackage);
                         }).catch((err) => {

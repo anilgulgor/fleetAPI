@@ -4,6 +4,7 @@ import { DeliveryPointModel } from "../DeliveryPoint/DeliveryPoint.model";
 import * as ERRORS from '../../shared/errors.json';
 import { BAG_STATUS } from "../../shared/status";
 import { ObjectResponse } from "../../shared/response";
+import { ShipmentModel } from "../Shipment/Shipment.model";
 
 export async function createBag({ barcode, deliveryPoint }: { barcode: String, deliveryPoint: Number }): Promise<IBagDocument> {
 
@@ -24,12 +25,13 @@ export async function createBag({ barcode, deliveryPoint }: { barcode: String, d
 
                     DeliveryPointModel.findOne({value: deliveryPoint}).then((_deliveryPoint) => {
                         if (_deliveryPoint) {
-
+                            
                             BagModel.create({
                                 barcode: barcode,
                                 destination: _deliveryPoint,
                                 deliveryPointForUnloading: _deliveryPoint.value
                             }).then((newBag) => {
+                                ShipmentModel.createShipment({shipmentBarcode: newBag.barcode, bag: newBag});
                                 newBag.setBagStatus({value: BAG_STATUS.Created});
                                 resolve(newBag);
                             }).catch((err) => {

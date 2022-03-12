@@ -7,7 +7,7 @@ export async function createVehicle({ plate }: { plate: String }): Promise<IVehi
 
     return new Promise<IVehicleDocument>((resolve, reject) => {
 
-        return VehicleModel.findOne({ plate: plate }).then((vehicle) => {
+        return isVehicleAvailable({plate}).then((vehicle) => {
 
             if (vehicle) {
                 reject(ObjectResponse({
@@ -25,6 +25,29 @@ export async function createVehicle({ plate }: { plate: String }): Promise<IVehi
                     reject(err);
                     return;
                 })
+            }
+
+        }).catch((err) => {
+            reject(err);
+            return;
+        })
+
+    })
+
+}
+
+export async function isVehicleAvailable({ plate }: { plate: String }): Promise<IVehicleDocument | null> {
+
+    return new Promise<IVehicleDocument | null>((resolve, reject) => {
+
+        return VehicleModel.findOne({ plate: plate }).then((vehicle) => {
+
+            if(vehicle) {
+                resolve(vehicle);
+                return;
+            } else {
+                resolve(null);
+                return;
             }
 
         }).catch((err) => {
