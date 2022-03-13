@@ -27,4 +27,5 @@ export interface IShipmentModel extends mongoose.Model<IShipmentDocument> {
     createShipment({ shipmentBarcode, bag, _package }: { shipmentBarcode: String, bag?: IBagDocument, _package?: IPackageDocument }): Promise<IShipmentDocument>;
     getShipment({ shipmentBarcode }: {shipmentBarcode: String}): Promise<IShipmentDocument | null>;
     attemptToLoadShipments({routes}: {routes: [RoutePayload]}): Promise<void>;
+    attemptToUnloadShipments({routes}: {routes: [RoutePayload]}): Promise<any[]>;
 }

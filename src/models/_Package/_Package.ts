@@ -21,6 +21,7 @@ export interface IPackageDocument extends IPackage, mongoose.Document {
     setPackageStatus(this: IPackageDocument, {value}: {value: Number}): void;
     assignPackageToBag(this: IPackageDocument, {bagBarcode}: {bagBarcode: String}): Promise<IPackageDocument>;
     isAssignedToBag(this: IPackageDocument): Promise<boolean>;
+    canBeDelivered(this: IPackageDocument): boolean;
     loadPackage(this: IPackageDocument): void;
     unloadPackage(this: IPackageDocument, deliveryPointValue: Number): void;
     isDeliveryPointRight(this: IPackageDocument, deliveryPointValue: Number): boolean;

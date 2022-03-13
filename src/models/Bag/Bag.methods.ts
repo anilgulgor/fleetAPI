@@ -38,10 +38,29 @@ export async function loadBag(this: IBagDocument) {
 
 }
 
+export function canBeDelivered(this: IBagDocument) : boolean {
+
+    switch (this.destination.value) {
+        case 1:
+            return false;
+        case 2:
+            return true;
+        case 3:
+            return true;
+        default:
+            return false;
+    }
+
+}
+
 export function isDeliveryPointRight(this: IBagDocument, deliveryPointValue: Number): boolean {
 
     if (this.destination.value == deliveryPointValue) {
-        return true;
+        if (this.canBeDelivered()) {
+            return true;
+        } else {
+            return false;
+        }
     } else {
         return false;
     }
@@ -93,7 +112,7 @@ export async function checkIfCanBeUnloaded(this: IBagDocument): Promise<void> {
                 } else {
 
                     resolve();
-                    
+
                 }
 
             } else {

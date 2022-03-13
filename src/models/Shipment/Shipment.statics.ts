@@ -28,8 +28,8 @@ export async function getShipment({ shipmentBarcode }: {shipmentBarcode: String}
     return new Promise<IShipmentDocument | null>((resolve, reject) => {
 
         return ShipmentModel.findOne({shipmentBarcode: shipmentBarcode})
-        .populate({path: 'bag', model: 'Bag'})
-        .populate({path: 'package', model: 'Package'})
+        .populate({path: 'bag', model: 'Bag', populate: {path: 'destination', model: 'DeliveryPoint'}})
+        .populate({path: 'package', model: 'Package', populate: {path: 'destination', model: 'DeliveryPoint'}})
         .then((shipment) => {
            if (shipment) {
                console.log(shipment);
@@ -52,13 +52,13 @@ export async function attemptToLoadShipments({ routes }: {routes: [RoutePayload]
 
     return new Promise((resolve, reject) => {
 
-        async.each((routes), (route, routeCallback) => {
+        async.eachSeries((routes), (route, routeCallback) => {
 
             const deliveryPoint = route.deliveryPoint;
 
             const deliveries: [DeliveryPayload] = route.deliveries;
 
-            async.each((deliveries), (delivery, deliveryCallback) => {
+            async.eachSeries((deliveries), (delivery, deliveryCallback) => {
 
                 ShipmentModel.getShipment({shipmentBarcode: delivery.barcode}).then((shipment) => {
 
@@ -115,3 +115,86 @@ export async function attemptToLoadShipments({ routes }: {routes: [RoutePayload]
 }
 
 // TODO: Attempt to unload shipments
+
+export async function attemptToUnloadShipments({ routes }: {routes: [RoutePayload]}): Promise<any[]> {
+
+    return new Promise<any[]>((resolve, reject) => {
+
+        const routeAfterAttempt:any[] = [];
+
+        async.eachSeries((routes), (route, routeCallback) => {
+
+            const deliveryPoint = route.deliveryPoint;
+
+            const deliveries: [DeliveryPayload] = route.deliveries;
+
+            const deliveriesAfterAttempt:any[] = [];
+
+            async.eachSeries((deliveries), (delivery, deliveryCallback) => {
+
+                let deliveryAfterAttempt:any = {};
+
+                ShipmentModel.getShipment({shipmentBarcode: delivery.barcode}).then((shipment) => {
+
+                    if (shipment) {
+
+                        if (shipment.bag) {
+                            shipment.bag.unloadBagAndAssignedPackages(deliveryPoint);
+                            deliveryAfterAttempt = {
+                                barcode: shipment.bag.barcode,
+                                state: shipment.bag.status.value
+                            }
+                            deliveriesAfterAttempt.push(deliveryAfterAttempt);
+                            deliveryCallback();
+                        } else if (shipment.package) {
+                            shipment.package.unloadPackage(deliveryPoint);
+                            deliveryAfterAttempt = {
+                                barcode: shipment.package.barcode,
+                                state: shipment.package.status.value
+                            }
+                            deliveriesAfterAttempt.push(deliveryAfterAttempt);
+                            deliveryCallback();
+                        } else {
+                            deliveryCallback();
+                        }
+
+                    } else {
+                        deliveryCallback();
+                    }
+
+                }).catch((err) => {
+                    deliveryCallback(err);
+                })
+
+            }, (err) => {
+
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                routeAfterAttempt.push({
+                    deliveryPoint: deliveryPoint,
+                    deliveries: deliveriesAfterAttempt
+                })
+
+                routeCallback();
+
+            })
+
+
+        }, (err) => {
+
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            resolve(routeAfterAttempt);
+            return;
+
+        })
+
+    })
+
+}

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { attemptToLoadShipments, createShipment, getShipment } from "./Shipment.statics";
+import { attemptToLoadShipments, attemptToUnloadShipments, createShipment, getShipment } from "./Shipment.statics";
 
 const ShipmentSchema = new mongoose.Schema(
 	{   
@@ -15,5 +15,6 @@ const ShipmentSchema = new mongoose.Schema(
 ShipmentSchema.statics.createShipment = createShipment;
 ShipmentSchema.statics.getShipment = getShipment;
 ShipmentSchema.statics.attemptToLoadShipments = attemptToLoadShipments;
+ShipmentSchema.statics.attemptToUnloadShipments = attemptToUnloadShipments;
 
 export default ShipmentSchema;

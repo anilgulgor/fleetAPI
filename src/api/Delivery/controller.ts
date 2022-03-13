@@ -25,12 +25,30 @@ export const attemptToDeliver: Hapi.Lifecycle.Method = async (request, h, err) =
             // Set all shipments (packages and bags) status to loaded
 
             return ShipmentModel.attemptToLoadShipments({routes: routes}).then(() => {
-                return h.response(ObjectResponse({userMessage: 'OK', developerMessage: 'OK'}));
+
+                // Step 2
+                // Attempt to unload shipments for this vehicle
+
+                return ShipmentModel.attemptToUnloadShipments({routes: routes}).then((distributedShipments) => {
+
+                    return h.response({plate: plate,route: distributedShipments});
+
+                }).catch((err) => {
+
+                    const _err: Boom.Boom = Boom.badRequest(
+                        err,
+                    );
+                    return err;
+
+                })
+
             }).catch((err) => {
+
                 const _err: Boom.Boom = Boom.badRequest(
                     err,
                 );
                 return err;
+
             })
             
 

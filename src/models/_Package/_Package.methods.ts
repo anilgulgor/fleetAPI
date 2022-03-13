@@ -110,6 +110,28 @@ export async function isAssignedToBag(this: IPackageDocument): Promise<boolean> 
 
 }
 
+
+export function canBeDelivered(this: IPackageDocument) : boolean {
+
+    if (this.bag) {
+        switch (this.destination.value) {
+            case 1:
+                return false;
+            default:
+                return true;
+        }
+    } else {
+        switch (this.destination.value) {
+            case 1:
+            case 2:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+}
+
 export async function loadPackage(this: IPackageDocument) {
 
     const isAssignedToBag: boolean = await this.isAssignedToBag();
@@ -127,7 +149,13 @@ export async function loadPackage(this: IPackageDocument) {
 export function isDeliveryPointRight(this: IPackageDocument, deliveryPointValue: Number): boolean {
 
     if (this.destination.value == deliveryPointValue) {
-        return true;
+        
+        if (this.canBeDelivered()) {
+            return true;
+        } else {
+            return false;
+        }
+        
     } else {
         return false;
     }
