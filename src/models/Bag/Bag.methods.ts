@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { IBagDocument } from "./Bag";
 import { BAG_STATUS, PACKAGE_STATUS } from "../../shared/status";
 import { PackageModel } from "../_Package/_Package.model";
+import { IncorrectlySentShipmentModel } from "../IncorrectlySentShipment/IncorrectlySentShipment.model";
 
 export async function setBagStatus(this: IBagDocument, { value }: { value: Number }): Promise<void> {
 
@@ -59,9 +60,17 @@ export function isDeliveryPointRight(this: IBagDocument, deliveryPointValue: Num
         if (this.canBeDelivered()) {
             return true;
         } else {
+            IncorrectlySentShipmentModel.createIncorrectlySentShipmentLog({
+                barcode: this.barcode,
+                deliveryPoint: deliveryPointValue
+            })
             return false;
         }
     } else {
+        IncorrectlySentShipmentModel.createIncorrectlySentShipmentLog({
+            barcode: this.barcode,
+            deliveryPoint: deliveryPointValue
+        })
         return false;
     }
 

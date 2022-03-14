@@ -4,7 +4,7 @@ import { IBagDocument } from "../Bag/Bag";
 import { IPackageDocument } from "../_Package/_Package";
 import * as async from 'async';
 
-export async function createShipment({ shipmentBarcode, bag, _package }: { shipmentBarcode: String, bag?: IBagDocument, _package?: IPackageDocument }): Promise<IShipmentDocument> {
+export async function createShipment({ shipmentBarcode, bag, _package, status }: { shipmentBarcode: String, bag?: IBagDocument, _package?: IPackageDocument, status: Number }): Promise<IShipmentDocument> {
 
     return new Promise<IShipmentDocument>((resolve, reject) => {
 
@@ -32,7 +32,6 @@ export async function getShipment({ shipmentBarcode }: {shipmentBarcode: String}
         .populate({path: 'package', model: 'Package', populate: {path: 'destination', model: 'DeliveryPoint'}})
         .then((shipment) => {
            if (shipment) {
-               console.log(shipment);
                resolve(shipment);
                return;
            } else {
@@ -54,8 +53,6 @@ export async function attemptToLoadShipments({ routes }: {routes: [RoutePayload]
 
         async.eachSeries((routes), (route, routeCallback) => {
 
-            const deliveryPoint = route.deliveryPoint;
-
             const deliveries: [DeliveryPayload] = route.deliveries;
 
             async.eachSeries((deliveries), (delivery, deliveryCallback) => {
@@ -66,12 +63,10 @@ export async function attemptToLoadShipments({ routes }: {routes: [RoutePayload]
 
                         if (shipment.bag) {
                             // shipment is bag
-                            console.log('shipment is bag ' + JSON.stringify(shipment.bag));
                             shipment.bag.loadBag()
                             deliveryCallback();
                         } else if (shipment.package) {
                             // shipment is package
-                            console.log('shipment is package ' + JSON.stringify(shipment.package));
                             shipment.package.loadPackage()
                             deliveryCallback();
                         } else {

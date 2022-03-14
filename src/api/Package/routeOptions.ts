@@ -5,7 +5,6 @@ export const createPackageOptions: Hapi.RouteOptions = {
     auth: false,
     validate: {
         failAction: (request, h, err) => {
-            console.log(err);
 			throw err;
 		},
         payload: Joi.object({
@@ -23,7 +22,6 @@ export const assignPackageToBagOptions: Hapi.RouteOptions = {
     auth: false,
     validate: {
         failAction: (request, h, err) => {
-            console.log(err);
 			throw err;
 		},
         payload: Joi.object({

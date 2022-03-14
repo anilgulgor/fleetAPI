@@ -7,17 +7,14 @@ export async function createVehicle({ plate }: { plate: String }): Promise<IVehi
 
     return new Promise<IVehicleDocument>((resolve, reject) => {
 
-        return isVehicleAvailable({plate}).then((vehicle) => {
+        return VehicleModel.findOne({ plate: plate }).then((vehicle) => {
 
             if (vehicle) {
-                reject(ObjectResponse({
-                    status: ERRORS.VEHICLE_ERRORS.VE_1,
-                    userMessage: `The Vehicle with plate: ${plate} is already registered in the system.`,
-                    developerMessage: `${ERRORS.VEHICLE_ERRORS.VE_1}: ${plate}`
-                }));
+                resolve(vehicle);
                 return;
             } else {
-                VehicleModel.create({
+
+                return VehicleModel.create({
                     plate: plate
                 }).then((newVehicle) => {
                     resolve(newVehicle);
@@ -25,29 +22,7 @@ export async function createVehicle({ plate }: { plate: String }): Promise<IVehi
                     reject(err);
                     return;
                 })
-            }
 
-        }).catch((err) => {
-            reject(err);
-            return;
-        })
-
-    })
-
-}
-
-export async function isVehicleAvailable({ plate }: { plate: String }): Promise<IVehicleDocument | null> {
-
-    return new Promise<IVehicleDocument | null>((resolve, reject) => {
-
-        return VehicleModel.findOne({ plate: plate }).then((vehicle) => {
-
-            if(vehicle) {
-                resolve(vehicle);
-                return;
-            } else {
-                resolve(null);
-                return;
             }
 
         }).catch((err) => {

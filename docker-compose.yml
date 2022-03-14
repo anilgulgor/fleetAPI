@@ -4,6 +4,8 @@ services:
 
   mongo:
     image: mongo
+    logging:
+      driver: none 
     restart: always
     ports:
       - 27017:27017
@@ -15,6 +17,8 @@ services:
 
   mongo-express:
     image: mongo-express
+    logging:
+      driver: none 
     restart: always
     ports:
       - 8081:8081
@@ -40,6 +44,13 @@ services:
         -wait tcp://mongo:27017 -wait tcp://fleet-api:8000 -timeout 10s
         bash -c "npm run test"
     image: fleet-api:latest
+    expose: 
+      - 8000
+    ports:
+    - '8001:8000'
     depends_on:
       - fleet-api
       - mongo
+    environment:
+      MONGO_HOST: mongodb://fleetAdmin:pass123@mongo:27017/fleetdb?authSource=admin
+      FLEET_API_URL: http://fleet-api:8000

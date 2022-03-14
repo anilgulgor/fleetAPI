@@ -4,6 +4,7 @@ import { PACKAGE_STATUS } from "../../shared/status";
 import { BagModel } from "../Bag/Bag.model";
 import * as ERRORS from "../../shared/errors.json"
 import { ObjectResponse } from "../../shared/response";
+import { IncorrectlySentShipmentModel } from "../IncorrectlySentShipment/IncorrectlySentShipment.model";
 
 export async function setPackageStatus(this: IPackageDocument, { value }: { value: Number }) {
 
@@ -57,7 +58,6 @@ export async function assignPackageToBag(this: IPackageDocument, { bagBarcode }:
                         this.deliveryPointForUnloading = bag.deliveryPointForUnloading;
 
                         return this.save().then((_package) => {
-                            console.log(_package);
                             resolve(_package);
                             return;
                         }).catch((err) => {
@@ -153,10 +153,18 @@ export function isDeliveryPointRight(this: IPackageDocument, deliveryPointValue:
         if (this.canBeDelivered()) {
             return true;
         } else {
+            IncorrectlySentShipmentModel.createIncorrectlySentShipmentLog({
+                barcode: this.barcode,
+                deliveryPoint: deliveryPointValue
+            })
             return false;
         }
         
     } else {
+        IncorrectlySentShipmentModel.createIncorrectlySentShipmentLog({
+            barcode: this.barcode,
+            deliveryPoint: deliveryPointValue
+        })
         return false;
     }
 

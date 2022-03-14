@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "tsc -w --preserveWatchOutput",
-    "test": "env $(cat .env) nyc mocha 'src/test/**/**.spec.**' --timeout 10000 --exit",
+    "test": "env $(cat .env) nyc mocha 'src/test/fleetapi.spec.**' --timeout 10000 --exit",
     "exec": "env $(cat .env) nodemon --watch '*.ts' --exec 'ts-node' src/app.ts",
     "exec:build": "env $(cat .env) node build/app.js"
   },

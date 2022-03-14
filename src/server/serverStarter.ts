@@ -49,7 +49,6 @@ export class ServerStarter {
 
         glob.sync('/../api/**/routes.*', { root: __dirname }).forEach((file) => {
 			const routes: Array<hapi.ServerRoute> = require(path.join(file)).Routes;
-            console.log(file);
 			try {
 				this.server.route(routes);
 			} catch (err) {

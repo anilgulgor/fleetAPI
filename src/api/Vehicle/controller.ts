@@ -9,27 +9,22 @@ export const createVehicle: Hapi.Lifecycle.Method = async (request, h, err) => {
         plate: String
     }
 
-    const createVehiclePayload: CreateVehiclePayload = <CreateVehiclePayload> request.payload;
+    const createVehiclePayload: CreateVehiclePayload = <CreateVehiclePayload>request.payload;
     const vehiclePlate: String = createVehiclePayload.plate.toUpperCase();
 
     return VehicleModel.createVehicle({
         plate: vehiclePlate
     }).then((newVehicle) => {
-        
-        return h.response(ObjectResponse({userMessage:`The vehicle with plate: ${vehiclePlate} is reqistered successfully`, developerMessage: `VEHICLE CREATED: ${vehiclePlate}`}));
+
+        return h.response(ObjectResponse({ userMessage: `The vehicle with plate: ${vehiclePlate} is reqistered successfully`, developerMessage: `VEHICLE CREATED: ${vehiclePlate}` }));
 
     }).catch((err) => {
 
-        if (err.code) {
+        const _err: Boom.Boom = Boom.badRequest(
+            err,
+        );
+        return err;
 
-            return h.response(err);
-
-        } else {
-            const _err: Boom.Boom = Boom.badRequest(
-                err,
-            );
-            return err;
-        }
 
     })
 

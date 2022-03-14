@@ -14,7 +14,6 @@ export const attemptToDeliverOptions: Hapi.RouteOptions = {
     auth: false,
     validate: {
         failAction: (request, h, err) => {
-            console.log(err);
 			throw err;
 		},
         payload: Joi.object({
