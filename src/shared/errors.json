@@ -1,0 +1,19 @@
+{
+    "VEHICLE_ERRORS": {
+        "VE_1": "ALREADY_REGISTERED",
+        "VE_2": "VEHICLE NOT AVAILABLE/NOT FOUND"
+    },
+    "DELIVERY_POINT_ERRORS": {
+        "DP_1": "ALREADY CREATED",
+        "DP_2": "DELIVERY POINT NOT FOUND"
+    },
+    "BAG_ERRORS": {
+        "BAG_1": "ALREADY CREATED",
+        "BAG_2": "BAG NOT FOUND",
+        "BAG_3": "DESTINATION IS NOT COMPATIBLE"
+    },
+    "PACKAGE_ERRORS": {
+        "PKG_1": "ALREADY CREATED",
+        "PKG_2": "PACKAGE NOT FOUND"
+    }
+}

@@ -1,0 +1,25 @@
+{
+  "extension": [
+      ".ts"
+  ],
+  "require": [
+      "ts-node/register"
+  ],
+  "include": [
+      "src/api/**/controller.ts"
+  ],
+  "exclude": [
+      "**/*.d.ts",
+       "coverage/**",
+       "node_modules/**",
+       "**/*.test.ts",
+       "src/api/**/test.ts",
+       "src/api/**/routes.ts",
+       "src/api/**/routeOptions.ts"
+  ],
+  "reporter": [
+      "html",
+      "text"
+  ],
+  "all": true
+}
