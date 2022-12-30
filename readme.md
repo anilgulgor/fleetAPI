@@ -1,6 +1,6 @@
-# Trendyol NodeJS Fleet API
+# NodeJS Fleet API
 
-Trendyol fleet api is written in Typescript with NodeJS Framework.\
+Fleet api is an experimental imaginary fleet corporate API written in Typescript with NodeJS Framework.\
 It uses **Hapi** for all incoming requests. \
 **Swagger (OpenAPI)** is used to create API documentation page with 'try it out' button to try all endpoints of fleet api service.
 
@@ -11,7 +11,7 @@ Project is dockerized with **fleet-api**, **mongo image**, **mongo-express image
 ## Installation
 
 Docker must be installed on computer before building app.
-[get docker](https://docs.docker.com/get-docker/) to install foobar.
+[get docker](https://docs.docker.com/get-docker/) to install Docker.
 
 After installing docker on computer, (be sure that docker-compose.yml file is in the main path), run script below:
 
@@ -21,6 +21,12 @@ docker-compose up --build
 This script will get mongo and mongo-express image, create volume for mongodb, build fleet-api from Dockerfile in application main path, and build fleet-api-test service for testing application.
 
 After building, Fleet-Api-Test service will wait for other services to run and when it is ready, it call 'npm run test' command to test the fleet-api service.
+
+If it gives any **mongo connection** error, just run the docker compose up script again. Downloaded packages while in building phase are cached. No need to build again.
+
+```bash
+docker-compose up
+```
 
 ## Usage
 
